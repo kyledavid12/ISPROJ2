@@ -9,7 +9,7 @@
     $con = mysqli_connect($server, $username, $password, $database );
 
     # display students record
-    $sql_students = "SELECT s.StudentID, st.StudentStatusName, l.LevelName, c.ClearanceStatus, s.FirstName, s.LastName, s.Picture, s.Birthday, s.Email, s.ContactNo, s.Address, s.MotherFirstName, s.MotherLastName, s.MotherOccupation, s.FatherFirstName, s.FatherLastName, s.FatherOccupation, s.DateAdded, s.DateModified FROM students s INNER JOIN studentstatus st ON s.StudentStatusID = st.StudentStatusID INNER JOIN level l ON s.LevelID = l.LevelID INNER JOIN clearance c ON s.ClearanceID = c.ClearanceID WHERE s.StudentStatusName !='Archived'";
+    $sql_students = "SELECT s.StudentID, st.StatusName, l.LevelName, c.ClearanceStatus, s.FirstName, s.LastName, s.Picture, s.Birthday, s.Email, s.ContactNo, s.Address, s.MotherFirstName, s.MotherLastName, s.MotherOccupation, s.FatherFirstName, s.FatherLastName, s.FatherOccupation, s.DateAdded, s.DateModified FROM students s INNER JOIN studentstatus st ON s.StudentStatusID = st.StudentStatusID INNER JOIN level l ON s.LevelID = l.LevelID INNER JOIN clearance c ON s.ClearanceID = c.ClearanceID WHERE s.StudentStatusName !='Archived'";
     $result_students = $con->query($sql_students)
 ?>
 <!DOCTYPE html>
