@@ -9,11 +9,7 @@
     $con = mysqli_connect($server, $username, $password, $database );
 
     # display students record
-    $sql_students = "SELECT s.StudentID, st.StatusName, l.LevelName, c.ClearanceStatus, s.FirstName, s.LastName, s.Picture, s.Birthday,
-    s.Email, s.ContactNo, s.Address, s.MotherFirstName, s.MotherLastName, s.MotherOccupation, s.FatherFirstName,
-    s.FatherLastName, s.FatherOccupation, s.DateAdded, s.DateModified FROM students s INNER JOIN studentstatus st 
-    ON s.StudentStatusID = st.StudentStatusID INNER JOIN level l ON s.LevelID = l.LevelID INNER JOIN clearance c 
-    ON s.ClearanceID = c.ClearanceID";
+    $sql_students = "SELECT s.StudentID, st.StatusName, l.LevelName, c.ClearanceStatus, s.FirstName, s.LastName, s.Picture, s.Birthday, s.Email, s.ContactNo, s.Address, s.MotherFirstName, s.MotherLastName, s.MotherOccupation, s.FatherFirstName, s.FatherLastName, s.FatherOccupation, s.DateAdded, s.DateModified FROM students s INNER JOIN studentstatus st ON s.StudentStatusID = st.StudentStatusID INNER JOIN level l ON s.LevelID = l.LevelID INNER JOIN clearance c ON s.ClearanceID = c.ClearanceID";
     $result_students = $con->query($sql_students)
 ?>
 <!DOCTYPE html>
@@ -253,9 +249,9 @@
           while ($row = mysqli_fetch_array($result_students))
           {
             $sid = $row['StudentID'];
-            $status = $row['StudentStatusID'];
-            $cid = $row['ClearanceID'];
-            $level = $row['LevelID'];
+            $st = $row['StatusName'];
+            $c = $row['ClearanceStatus'];
+            $level = $row['LevelName'];
             $pic = $row['Picture'];
             $fn = $row['FirstName'];
             $ln = $row['LastName'];
@@ -275,10 +271,10 @@
             echo "
               <tr>
                 <td>$sid</td>
-                <td>$status</td>
-                <td>$cid</td>
+                <td>$st</td>
+                <td>$c</td>
                 <td>$level</td>
-                <td>$pc</td>
+                <td>$pic</td>
                 <td>$ln, $fn</td>
                 <td>$email</td>
                 <td>$bday</td>
@@ -286,15 +282,15 @@
                 <td>$address</td>
                 <td>$mln, $mfn</td>
                 <td>$moccu</td>
-                <td>$ffn, fln</td>
+                <td>$ffn, $fln</td>
                 <td>$foccu</td>
                 <td>$added</td>
                 <td>$modified</td>
                 <td>
-                  <a href='details.php?id=$id' class='btn btn-xs btn-info'>
+                  <a href='details.php?sid=$sid' class='btn btn-xs btn-info'>
                     <i class='fa fa-edit'></i>
                   </a>
-                  <a href='delete.php?id=$id' class='btn btn-xs btn-danger' 
+                  <a href='delete.php?sid=$sid' class='btn btn-xs btn-danger' 
                     onclick='return confirm(\"Archived record?\");''>
                     <i class='fa fa-trash'></i>
                   </a>
