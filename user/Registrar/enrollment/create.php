@@ -6,7 +6,7 @@ $page_title = "Register a User";
     $username = "root";
     $password = "";
 
-    $con = mysqli_connect($server, $database, $username, $password );
+    $con = mysqli_connect($server, $username, $password, $database );
 
     // $fn = $mn = $ln = $genderID = $bday = $email = $contactNo = $address = $mFN = $mLN = $mOccu = $fFN = $fLN = $fOccu
     // = $statusID = $pic = "";
@@ -278,7 +278,7 @@ $page_title = "Register a User";
             </div>
             <!-- /.box-header -->
             <!-- form start -->
-            <form class="form-horizontal">
+            <form action = "view.php" method="POST" class="form-horizontal">
               <div class="box-body">
 
                 <div class="form-group">
@@ -415,7 +415,7 @@ $page_title = "Register a User";
                 <div class="form-group">
                   <label for="exampleInputFile" class="col-sm-2 control-label">Picture </label>
                   <div class="col-sm-10">
-                    <input type="file" name="pic"  id="exampleInputFile" required>
+                    <input type="file" name="pic"  id="exampleInputFile" >
                   </div>
                 </div>
 
