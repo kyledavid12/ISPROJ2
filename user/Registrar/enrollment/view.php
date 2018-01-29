@@ -213,39 +213,58 @@
     <!-- Main content -->
     <section class="content">
       <div class="row">
-        <!-- left column -->
-        <div class="col-md-12">
-          <!-- general form elements -->
-          <div class="box box-primary">
-            <div class="box-header with-border">
-              <h3 class="box-title">View student record</h3>
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Enrollee record</h3>
+            </div>
+            <div class="col-md-12">
+              <div class="box-body pad table-responsive">
+                <table class="table table-bordered text-center">
+                  <tbody>
+                    <tr>
+                      <td>
+                        <label>Input name</label>
+                        <input type="keyword" class="form-control" id="samplekeyword" placeholder="Enter Name . . .">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <a href="view.php">
+                        <button type="button" class="btn btn-success">Search Student</button>
+                        </a>
+                      </td>
+                    </tr>
+                    
+                  </tbody>
+                </table>
+              </div>
             </div>
             <!-- /.box-header -->
-            <!-- form start -->
-            <form method="POST" class="form-horizontal">
-  <div class="col-lg-12">
-    <table id="tblUsers" class="table table-hover">
-      <thead>
-        <th>#</th>
-        <th>Status</th>
-        <th>Clearance</th>
-        <th>Level</th>
-        <th>Picture</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Birthday</th>
-        <th>Contact#</th>
-        <th>Address</th>
-        <th>Mother's Name</th>
-        <th>Mother's Occupation</th>
-        <th>Father's Name</th>
-        <th>Father's Occupation</th>
-        <th>Added On</th>
-        <th>Last Modified</th>
-        <th></th>
-      </thead>
-      <tbody>
-        <?php
+            <div class="box-body">
+              <table id="tblUsers" class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Status</th>
+                  <th>Clearance</th>
+                  <th>Level</th>
+                  <th>Photo</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Bday</th>
+                  <th>Contact #</th>
+                  <th>Address</th>
+                  <th>Mother</th>
+                  <th>Occupation</th>
+                  <th>Father</th>
+                  <th>Occupation</th>
+                  <th>Added On</th>
+                  <th>Modified</th>
+                </tr>
+                </thead>
+                <tbody>
+                 <?php
           while ($row = mysqli_fetch_array($result_students))
           {
             $sid = $row['StudentID'];
@@ -300,19 +319,17 @@
           }
 
         ?>
-      </tbody>
-    </table>
-    <script>
-      $(document).ready(function(){
-          $('#tblUsers').DataTable();
-      });
-    </script>
-  </div>
-</form>
-
+                </tbody>
+                </tfoot>
+              </table>
+            </div>
+            <!-- /.box-body -->
           </div>
+          <!-- /.box -->
         </div>
+        <!-- /.col -->
       </div>
+      <!-- /.row -->
     </section>
     <!-- /.content -->
   </div>
