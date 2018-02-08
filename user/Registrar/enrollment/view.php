@@ -9,7 +9,8 @@
     $con = mysqli_connect($server, $username, $password, $database );
 
     # display students record
-    $sql_students = "SELECT s.StudentID, st.StatusName, l.LevelName, c.ClearanceStatus, s.FirstName, s.LastName, s.Picture, s.Birthday, s.Email, s.ContactNo, s.Address, s.MotherFirstName, s.MotherLastName, s.MotherOccupation, s.FatherFirstName, s.FatherLastName, s.FatherOccupation, s.DateAdded, s.DateModified FROM students s INNER JOIN studentstatus st ON s.StudentStatusID = st.StudentStatusID INNER JOIN level l ON s.LevelID = l.LevelID INNER JOIN clearance c ON s.ClearanceID = c.ClearanceID";
+    // $sql_students = "SELECT s.StudentID, st.StatusName, l.LevelName, c.ClearanceStatus, s.FirstName, s.LastName, s.Birthday, s.Email, s.ContactNo, s.Address, s.MotherFirstName, s.MotherLastName, s.MotherOccupation, s.FatherFirstName, s.FatherLastName, s.FatherOccupation, s.DateAdded, s.DateModified FROM students s INNER JOIN studentstatus st ON s.StudentStatusID = st.StudentStatusID INNER JOIN level l ON s.LevelID = l.LevelID INNER JOIN clearance c ON s.ClearanceID = c.ClearanceID";
+     $sql_students = "SELECT * FROM students";
     $result_students = $con->query($sql_students)
 ?>
 <!DOCTYPE html>
@@ -138,8 +139,8 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="check.html"><i class="fa fa-circle-o"></i> Check enrollee requirements </a></li>
-            <li><a href="create.html"><i class="fa fa-circle-o"></i> Create student record</a></li>
+            <li><a href="view.php"><i class="fa fa-circle-o"></i> Check enrollee requirements </a></li>
+            <li><a href="create.php"><i class="fa fa-circle-o"></i> Create student record</a></li>
           </ul>
         </li>
         <li class="treeview">
@@ -224,15 +225,8 @@
                   <tbody>
                     <tr>
                       <td>
-                        <label>Input name</label>
-                        <input type="keyword" class="form-control" id="samplekeyword" placeholder="Enter Name . . .">
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="view.php">
-                        <button type="button" class="btn btn-success">Search Student</button>
-                        </a>
+                        <label>Input name</label><br>
+                        <input type="keyword" size = "180" onkeyup="showResult(this.value)" id="livesearch" placeholder="Enter ID Number   . . .">
                       </td>
                     </tr>
                     
@@ -242,23 +236,20 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <table id="tblUsers" class="table table-bordered table-hover">
+              <table id="example2" class="table table-bordered table-hover">
                 <thead>
                 <tr>
                   <th>#</th>
                   <th>Status</th>
-                  <th>Clearance</th>
                   <th>Level</th>
-                  <th>Photo</th>
+                  <th>Clearance</th>
                   <th>Name</th>
                   <th>Email</th>
                   <th>Bday</th>
                   <th>Contact #</th>
                   <th>Address</th>
-                  <th>Mother</th>
-                  <th>Occupation</th>
-                  <th>Father</th>
-                  <th>Occupation</th>
+                  <th>Mother's Name</th>
+                  <th>Father's Name</th>
                   <th>Added On</th>
                   <th>Modified</th>
                 </tr>
@@ -268,10 +259,9 @@
           while ($row = mysqli_fetch_array($result_students))
           {
             $sid = $row['StudentID'];
-            $st = $row['StatusName'];
-            $c = $row['ClearanceStatus'];
-            $level = $row['LevelName'];
-            $pic = $row['Picture'];
+            $st = $row['StudentStatusID'];
+            $level = $row['LevelID'];
+            $c = $row['ClearanceID']; 
             $fn = $row['FirstName'];
             $ln = $row['LastName'];
             $email = $row['Email'];
@@ -280,10 +270,8 @@
             $address = $row['Address'];
             $mfn = $row['MotherFirstName'];
             $mln = $row['MotherLastName'];
-            $moccu = $row['MotherOccupation'];
             $ffn = $row['FatherFirstName'];
             $fln = $row['FatherLastName'];
-            $foccu = $row['FatherOccupation'];
             $added = $row['DateAdded'];
             $modified = $row['DateModified'];
 
@@ -291,18 +279,15 @@
               <tr>
                 <td>$sid</td>
                 <td>$st</td>
-                <td>$c</td>
                 <td>$level</td>
-                <td>$pic</td>
+                <td>$c</td>
                 <td>$ln, $fn</td>
                 <td>$email</td>
                 <td>$bday</td>
                 <td>$no</td>
                 <td>$address</td>
                 <td>$mln, $mfn</td>
-                <td>$moccu</td>
                 <td>$ffn, $fln</td>
-                <td>$foccu</td>
                 <td>$added</td>
                 <td>$modified</td>
                 <td>
@@ -379,10 +364,10 @@
     $('#example2').DataTable({
       'paging'      : true,
       'lengthChange': false,
-      'searching'   : false,
+      'searching'   : true,
       'ordering'    : true,
       'info'        : true,
-      'autoWidth'   : false
+      'autoWidth'   : true
     })
 
     //Datemask dd/mm/yyyy
@@ -391,6 +376,8 @@
     $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
     //Money Euro
     $('[data-mask]').inputmask()
+    
+}
   })
 </script>
 </body>
