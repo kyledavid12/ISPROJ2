@@ -1,18 +1,3 @@
-<?php
-    $page_title = "View Students";
-
-    $server = "localhost";
-    $database = "snfssinformationsystem";
-    $username = "root";
-    $password = "";
-
-    $con = mysqli_connect($server, $username, $password, $database );
-
-    # display students record
-    // $sql_students = "SELECT s.StudentID, st.StatusName, l.LevelName, c.ClearanceStatus, s.FirstName, s.LastName, s.Birthday, s.Email, s.ContactNo, s.Address, s.MotherFirstName, s.MotherLastName, s.MotherOccupation, s.FatherFirstName, s.FatherLastName, s.FatherOccupation, s.DateAdded, s.DateModified FROM students s INNER JOIN studentstatus st ON s.StudentStatusID = st.StudentStatusID INNER JOIN level l ON s.LevelID = l.LevelID INNER JOIN clearance c ON s.ClearanceID = c.ClearanceID";
-     $sql_students = "SELECT * FROM students";
-    $result_students = $con->query($sql_students)
-?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -139,8 +124,8 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="view.php"><i class="fa fa-circle-o"></i> Check enrollee requirements </a></li>
-            <li><a href="create.php"><i class="fa fa-circle-o"></i> Create student record</a></li>
+            <li><a href="check.html"><i class="fa fa-circle-o"></i> Check enrollee requirements </a></li>
+            <li><a href="create.html"><i class="fa fa-circle-o"></i> Create student record</a></li>
           </ul>
         </li>
         <li class="treeview">
@@ -214,87 +199,55 @@
     <!-- Main content -->
     <section class="content">
       <div class="row">
-        <div class="col-xs-12">
-          <div class="box">
-            <div class="box-header">
-              <h3 class="box-title">Enrollee record</h3>
-            </div>
-            <div class="col-md-12">
-              <div class="box-body pad table-responsive">
-                <table class="table table-bordered text-center">
-                  <tbody>
-                    <tr>
-                      <td>
-                        <label>Input name</label><br>
-                        <input type="keyword" size = "180" onkeyup="showResult(this.value)" id="livesearch" placeholder="Enter ID Number   . . .">
-                      </td>
-                    </tr>
-                    
-                  </tbody>
-                </table>
-              </div>
+        <!-- left column -->
+        <div class="col-md-12">
+          <!-- general form elements -->
+          <div class="box box-primary">
+            <div class="box-header with-border">
+              <h3 class="box-title">View student record</h3>
             </div>
             <!-- /.box-header -->
-            <div class="box-body">
-              <table id="example2" class="table table-bordered table-hover">
-                <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Status</th>
-                  <th>Level</th>
-                  <th>Clearance</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Bday</th>
-                  <th>Contact #</th>
-                  <th>Address</th>
-                  <th>Mother's Name</th>
-                  <th>Father's Name</th>
-                  <th>Added On</th>
-                  <th>Modified</th>
-                </tr>
-                </thead>
-                <tbody>
-                 <?php
-          while ($row = mysqli_fetch_array($result_students))
+            <!-- form start -->
+            <form method="POST" class="form-horizontal">
+  <div class="col-lg-12">
+    <table id="tblUsers" class="table table-hover">
+      <thead>
+        <th>#</th>
+        <th>User Type</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Status</th>
+        <th>Added On</th>
+        <th>Last Modified</th>
+        <th></th>
+      </thead>
+      <tbody>
+        <?php
+          while ($row = mysqli_fetch_array($result_users))
           {
-            $sid = $row['StudentID'];
-            $st = $row['StudentStatusID'];
-            $level = $row['LevelID'];
-            $c = $row['ClearanceID']; 
-            $fn = $row['FirstName'];
-            $ln = $row['LastName'];
-            $email = $row['Email'];
-            $bday = $row['Birthday'];
-            $no = $row['ContactNo'];
-            $address = $row['Address'];
-            $mfn = $row['MotherFirstName'];
-            $mln = $row['MotherLastName'];
-            $ffn = $row['FatherFirstName'];
-            $fln = $row['FatherLastName'];
-            $added = $row['DateAdded'];
-            $modified = $row['DateModified'];
+            $id = $row['userID'];
+            $type = $row['userType'];
+            $fn = $row['firstName'];
+            $ln = $row['lastName'];
+            $email = $row['email'];
+            $status = $row['status'];
+            $added = $row['addedOn'];
+            $modified = $row['lastModified'];
 
             echo "
               <tr>
-                <td>$sid</td>
-                <td>$st</td>
-                <td>$level</td>
-                <td>$c</td>
+                <td>$id</td>
+                <td>$type</td>
                 <td>$ln, $fn</td>
                 <td>$email</td>
-                <td>$bday</td>
-                <td>$no</td>
-                <td>$address</td>
-                <td>$mln, $mfn</td>
-                <td>$ffn, $fln</td>
+                <td>$status</td>
                 <td>$added</td>
                 <td>$modified</td>
                 <td>
-                  <a href='details.php?sid=$sid' class='btn btn-xs btn-info'>
+                  <a href='details.php?id=$id' class='btn btn-xs btn-info'>
                     <i class='fa fa-edit'></i>
                   </a>
-                  <a href='delete.php?sid=$sid' class='btn btn-xs btn-danger' 
+                  <a href='delete.php?id=$id' class='btn btn-xs btn-danger' 
                     onclick='return confirm(\"Archived record?\");''>
                     <i class='fa fa-trash'></i>
                   </a>
@@ -304,17 +257,19 @@
           }
 
         ?>
-                </tbody>
-                </tfoot>
-              </table>
-            </div>
-            <!-- /.box-body -->
+      </tbody>
+    </table>
+    <script>
+      $(document).ready(function(){
+          $('#tblUsers').DataTable();
+      });
+    </script>
+  </div>
+</form>
+
           </div>
-          <!-- /.box -->
         </div>
-        <!-- /.col -->
       </div>
-      <!-- /.row -->
     </section>
     <!-- /.content -->
   </div>
@@ -364,10 +319,10 @@
     $('#example2').DataTable({
       'paging'      : true,
       'lengthChange': false,
-      'searching'   : true,
+      'searching'   : false,
       'ordering'    : true,
       'info'        : true,
-      'autoWidth'   : true
+      'autoWidth'   : false
     })
 
     //Datemask dd/mm/yyyy
@@ -376,8 +331,6 @@
     $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
     //Money Euro
     $('[data-mask]').inputmask()
-    
-}
   })
 </script>
 </body>
