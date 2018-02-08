@@ -14,29 +14,25 @@ $page_title = "Register a User";
     # add a student
   if (isset($_POST['add']))
   {
-    $fn = mysqli_real_escape_string($con, $_POST['fn']);
-    $mn = mysqli_real_escape_string($con, $_POST['mn']);
-    $ln = mysqli_real_escape_string($con, $_POST['ln']);
-    $genderID = mysqli_real_escape_string($con, $_POST['gender']);
-    $bday = mysqli_real_escape_string($con, $_POST['bday']);
-    $email = mysqli_real_escape_string($con, $_POST['email']);
-    $contactNo = mysqli_real_escape_string($con, $_POST['contactNo']);
-    $address = mysqli_real_escape_string($con, $_POST['address']);
-    $mFN = mysqli_real_escape_string($con, $_POST['mFN']);
-    $mLN = mysqli_real_escape_string($con, $_POST['mLN']);
-    $mOccu = mysqli_real_escape_string($con, $_POST['mOccu']);
-    $fFN = mysqli_real_escape_string($con, $_POST['fFN']);
-    $fLN = mysqli_real_escape_string($con, $_POST['fLN']);
-    $fOccu = mysqli_real_escape_string($con, $_POST['fOccu']);
-    $statusID = mysqli_real_escape_string($con, $_POST['status']);
-    $pic = mysqli_real_escape_string($con, $_POST['pic']);
-    
+    $statusID = mysqli_real_escape_string($con, $_POST['StudentStatusID']);
+    $levelID = mysqli_real_escape_string($con, $_POST['LevelID']);
+    $fn = mysqli_real_escape_string($con, $_POST['FirstName']);
+    $mn = mysqli_real_escape_string($con, $_POST['MiddleName']);
+    $ln = mysqli_real_escape_string($con, $_POST['LastName']);
+    $pic = mysqli_real_escape_string($con, $_POST['Picture']);
+    $genderID = mysqli_real_escape_string($con, $_POST['GenderID']);
+    $bday = mysqli_real_escape_string($con, $_POST['Birthday']);
+    $email = mysqli_real_escape_string($con, $_POST['Email']);
+    $contactNo = mysqli_real_escape_string($con, $_POST['ContactNo']);
+    $address = mysqli_real_escape_string($con, $_POST['Address']);
+    $mFN = mysqli_real_escape_string($con, $_POST['MotherFirstName']);
+    $mLN = mysqli_real_escape_string($con, $_POST['MotherLastName']);
+    $mOccu = mysqli_real_escape_string($con, $_POST['MotherOccupation']);
+    $fFN = mysqli_real_escape_string($con, $_POST['FatherFirstName']);
+    $fLN = mysqli_real_escape_string($con, $_POST['FatherLastName']);
+    $fOccu = mysqli_real_escape_string($con, $_POST['FatherOccupation']);
 
-    $sql_add = "INSERT INTO students (StudentID, FirstName, MiddleName, LastName, Picture, Gender, 
-    Birthday, Email, ContactNo, Address, MotherFirstName, MotherLastName, MotherOccupation, 
-    FatherFirstName, FatherLastName, FatherOccupation,StudentStatus, DateAdded, DateModified) VALUES ('', 
-    '$fn', '$nm', '$ln', '$pic', $genderID, '$bday', '$email', '$contactNo', '$address', '$mFN', '$mLN', '$mOccu', 
-    '$fFN', '$fLN', '$fOccu', $statusID, NOW(), NULL)";
+    $sql_add = "INSERT INTO students (`StudentID`, `StudentStatusID`, `LevelID`, `FirstName`, `MiddleName`, `LastName`, `GenderID`, `Birthday`, `Email`, `ContactNo`, `Address`, `MotherFirstName`, `MotherLastName`, `MotherOccupation`, `FatherFirstName`, `FatherLastName`, `FatherOccupation`, `DateAdded`, `DateModified`) VALUES ('', '$statusID', '$levelID', '$fn', '$mn', '$ln', '$genderID', '$bday', '$email', '$contactNo', '$address', '$mFN', '$mLN', '$mOccu', '$fFN', '$fLN', '$mOccu', NOW(), NULL)";
 
     $con->query($sql_add) or die(mysqli_error($con));
     # edit location  
@@ -56,15 +52,27 @@ $page_title = "Register a User";
      }
 
      # list of status
-    $sql_status = "SELECT statusName, statusID FROM status ORDER BY statusID";
+    $sql_status = "SELECT StatusName, StudentStatusID FROM studentstatus ORDER BY StudentStatusID";
      $result_status =$con->query($sql_status);
 
      $list_status = "";
      while($row = mysqli_fetch_array($result_status))
      {
-        $statusID= $row['statusID'];
-        $statusName= $row['statusName'];
+        $statusID= $row['StudentStatusID'];
+        $statusName= $row['StatusName'];
         $list_status .="<option value='$statusID'>$statusName</option>";
+     }
+
+     # list of level
+    $sql_level = "SELECT LevelName, LevelID FROM level ORDER BY LevelID";
+     $result_level =$con->query($sql_level);
+
+     $list_level = "";
+     while($row = mysqli_fetch_array($result_level))
+     {
+        $LevelID= $row['LevelID'];
+        $LevelName= $row['LevelName'];
+        $list_level .="<option value='$LevelID'>$LevelName</option>";
      }
 ?>
 
@@ -194,8 +202,8 @@ $page_title = "Register a User";
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="check.html"><i class="fa fa-circle-o"></i> Check enrollee requirements </a></li>
-            <li><a href="create.html"><i class="fa fa-circle-o"></i> Create student record</a></li>
+            <li><a href="view.php"><i class="fa fa-circle-o"></i> Check enrollee requirements </a></li>
+            <li><a href="create.php"><i class="fa fa-circle-o"></i> Create student record</a></li>
           </ul>
         </li>
         <li class="treeview">
@@ -278,38 +286,38 @@ $page_title = "Register a User";
             </div>
             <!-- /.box-header -->
             <!-- form start -->
-            <form action = "view.php" method="POST" class="form-horizontal">
+            <form method="POST" class="form-horizontal">
               <div class="box-body">
 
                 <div class="form-group">
-                  <label for="inputPassword3" class="col-sm-2 control-label">First name</label>
+                  <label for="firstName" class="col-sm-2 control-label">First name</label>
 
                   <div class="col-sm-10">
-                    <input type="text" name="fn"  class="form-control" required>
+                    <input type="text" name="FirstName"  class="form-control" required>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label for="inputPassword3" class="col-sm-2 control-label">Middle name</label>
+                  <label for="middleName" class="col-sm-2 control-label">Middle name</label>
 
                   <div class="col-sm-10">
-                    <input type="text" name="mn"  class="form-control" required>
+                    <input type="text" name="MiddleName"  class="form-control" required>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label for="inputPassword3" class="col-sm-2 control-label">Last name</label>
+                  <label for="lastName" class="col-sm-2 control-label">Last name</label>
 
                   <div class="col-sm-10">
-                    <input type="text" name="ln"  class="form-control" required>
+                    <input type="text" name="LastName"  class="form-control" required>
                   </div>
                 </div>
 
                 <div class="form-group">
                   <label class="col-sm-2 control-label">Gender</label>
                   <div class="col-sm-10">
-                    <select name="genderID"  class="form-control" required>
-                      <option value="">Select One ...
+                    <select name="GenderID"  class="form-control" required>
+                      <option>
                         </option>
                         <?php echo $list_gender; ?>
                         </select>     
@@ -324,80 +332,91 @@ $page_title = "Register a User";
                       <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                       </div>
-                      <input type="text" name="bday"  class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask required>
+                      <input type="text" name="Birthday"  class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask required>
                     </div>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label for="inputPassword3" class="col-sm-2 control-label">Email</label>
+                  <label for="email" class="col-sm-2 control-label">Email</label>
 
                   <div class="col-sm-10">
-                    <input type="email" name="email"  class="form-control" required>
+                    <input type="email" name="Email"  class="form-control" required>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label for="inputPassword3" class="col-sm-2 control-label">Contact number</label>
+                  <label for="contactNp" class="col-sm-2 control-label">Contact number</label>
 
                   <div class="col-sm-10">
-                    <input type="text" name="contactNo"  class="form-control" required>
+                    <input type="text" name="ContactNo"  class="form-control" required>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label for="inputPassword3" class="col-sm-2 control-label">Address</label>
+                  <label for="address" class="col-sm-2 control-label">Address</label>
 
                   <div class="col-sm-10">
-                    <input type="text" name="address"  class="form-control" required>
+                    <input type="text" name="Address"  class="form-control" required>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label for="inputPassword3" class="col-sm-2 control-label">Mother's first name</label>
+                  <label for="momFirstName" class="col-sm-2 control-label">Mother's first name</label>
 
                   <div class="col-sm-10">
-                    <input type="text" name="mFN"  class="form-control" required>
+                    <input type="text" name="MotherFirstName"  class="form-control" required>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label for="inputPassword3" class="col-sm-2 control-label">Mother's last name</label>
+                  <label for="momLastName" class="col-sm-2 control-label">Mother's last name</label>
 
                   <div class="col-sm-10">
-                    <input type="text" name="mLN"  class="form-control" required>
+                    <input type="text" name="MotherLastName"  class="form-control" required>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label for="inputPassword3" class="col-sm-2 control-label">Mother's occupation</label>
+                  <label for="momOccupation" class="col-sm-2 control-label">Mother's occupation</label>
 
                   <div class="col-sm-10">
-                    <input type="text" name="mOccu"  class="form-control" required>
+                    <input type="text" name="MotherOccupation"  class="form-control" required>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label for="inputPassword3" class="col-sm-2 control-label">Father's first name</label>
+                  <label for="dadaFirstName" class="col-sm-2 control-label">Father's first name</label>
 
                   <div class="col-sm-10">
-                    <input type="text" name="fFN"  class="form-control" required>
+                    <input type="text" name="FatherFirstName"  class="form-control" required>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label for="inputPassword3" class="col-sm-2 control-label">Father's last name</label>
+                  <label for="dadLastName" class="col-sm-2 control-label">Father's last name</label>
 
                   <div class="col-sm-10">
-                    <input type="text" name="fLN"  class="form-control" required>
+                    <input type="text" name="FatherLastName"  class="form-control" required>
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label for="inputPassword3" class="col-sm-2 control-label">Father's occupation</label>
+                  <label for="dadOccupation" class="col-sm-2 control-label">Father's occupation</label>
 
                   <div class="col-sm-10">
-                    <input type="text" name="fOccu"  class="form-control" required>
+                    <input type="text" name="FatherOccupation"  class="form-control" required>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">Level</label>
+                  <div class="col-sm-10">
+                    <select name="LevelID"  class="form-control" required>
+                      <option placeholder="">
+                        </option>
+                        <?php echo $list_level; ?>
+                        </select>     
                   </div>
                 </div>
 
@@ -405,7 +424,7 @@ $page_title = "Register a User";
                   <label class="col-sm-2 control-label">Status</label>
                   <div class="col-sm-10">
                     <select name="statusID"  class="form-control" required>
-                      <option value=""> Select One ...
+                      <option>
                         </option>
                         <?php echo $list_status; ?>
                         </select>     
@@ -415,7 +434,7 @@ $page_title = "Register a User";
                 <div class="form-group">
                   <label for="exampleInputFile" class="col-sm-2 control-label">Picture </label>
                   <div class="col-sm-10">
-                    <input type="file" name="pic"  id="exampleInputFile" >
+                    <input type="file" name="Picture"  id="exampleInputFile" >
                   </div>
                 </div>
 
@@ -423,12 +442,13 @@ $page_title = "Register a User";
                 <!-- /.input group -->
               </div>
               <!-- /.box-body -->
-              <div class="box-footer">
-                <button name ="cancel" type="cancel" class="btn btn-default">Cancel</button>
-                <!-- <a href="../index.html"> -->
-                  <button name ="add" type="submit" class="btn btn-success pull-right">Create</button>
-                </a>
-              </div>
+              <div class="form-group">
+      <div class="col-lg-offset-4 col-lg-8">
+        <button name="add" type="submit" class="btn btn-success">
+          Add
+        </button>
+      </div>
+    </div>
               <!-- /.box-footer -->
             </form>
           </div>
