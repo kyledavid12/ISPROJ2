@@ -1,3 +1,15 @@
+<?php
+    $page_title = "Index Students";
+    $server = "localhost";
+    $database = "snfssinformationsystem";
+    $username = "root";
+    $password = "";
+    $con = mysqli_connect($server, $username, $password, $database );
+    # display students record
+    // $sql_students = "SELECT s.StudentID, st.StatusName, l.LevelName, c.ClearanceStatus, s.FirstName, s.LastName, s.Birthday, s.Email, s.ContactNo, s.Address, s.MotherFirstName, s.MotherLastName, s.MotherOccupation, s.FatherFirstName, s.FatherLastName, s.FatherOccupation, s.DateAdded, s.DateModified FROM students s INNER JOIN studentstatus st ON s.StudentStatusID = st.StudentStatusID INNER JOIN level l ON s.LevelID = l.LevelID INNER JOIN clearance c ON s.ClearanceID = c.ClearanceID";
+     $sql_students = "SELECT * FROM students";
+    $result_students = $con->query($sql_students)
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -125,7 +137,7 @@
           </a>
           <ul class="treeview-menu">
             <li><a href="../enrollment/check.html"><i class="fa fa-circle-o"></i> Check enrollee requirements </a></li>
-            <li><a href="../enrollment/create.html"><i class="fa fa-circle-o"></i> Create student record</a></li>
+            <li><a href="../enrollment/create.php"><i class="fa fa-circle-o"></i> Create student record</a></li>
           </ul>
         </li>
         <li class="treeview">
@@ -233,21 +245,44 @@
                 <thead>
                 <tr>
                   <th>Student ID</th>
+                  <th>Level</th>
                   <th>Name</th>
                   <th>Birthday</th>
                   <th>Address</th>
                   <th>Status</th>
+                  <th>Added On</th>
+                  <th>Modified On</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                  <td>15234</td>
-                  <td>Merigo, Jonathan
-                  </td>
-                  <td>02/17/1995</td>
-                  <td>123rd Mayon Street, Basil Subdivision, Batangas City</td>
-                  <td>Not Enrolled</td>
-                </tr>
+               <?php
+          while ($row = mysqli_fetch_array($result_students))
+          {
+            $sid = $row['StudentID'];
+            $st = $row['StudentStatusID'];
+            $level = $row['LevelID'];
+            $fn = $row['FirstName'];
+            $ln = $row['LastName'];           
+            $bday = $row['Birthday'];           
+            $address = $row['Address'];           
+            $added = $row['DateAdded'];
+            $modified = $row['DateModified'];
+            echo "
+              <tr>
+                <td>$sid</td>
+                <td>$st</td>
+                <td>$level</td>
+                <td>$ln, $fn</td>               
+                <td>$bday</td>               
+                <td>$address</td> 
+                <td>$added</td>
+                <td>$modified</td>
+                
+              </tr>
+            ";
+          }
+        ?>
+              </tbody> 
                 </tfoot>
               </table>
             </div>
