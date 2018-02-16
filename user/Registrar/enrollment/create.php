@@ -8,38 +8,8 @@ $page_title = "Register a User";
 
     $con = mysqli_connect($server, $username, $password, $database );
 
-    // $fn = $mn = $ln = $genderID = $bday = $email = $contactNo = $address = $mFN = $mLN = $mOccu = $fFN = $fLN = $fOccu
-    // = $statusID = $pic = "";
-
-    # add a student
-  if (isset($_POST['add']))
-  {
-    $statusID = mysqli_real_escape_string($con, $_POST['StudentStatusID']);
-    $levelID = mysqli_real_escape_string($con, $_POST['LevelID']);
-    $fn = mysqli_real_escape_string($con, $_POST['FirstName']);
-    $mn = mysqli_real_escape_string($con, $_POST['MiddleName']);
-    $ln = mysqli_real_escape_string($con, $_POST['LastName']);
-    $pic = mysqli_real_escape_string($con, $_POST['Picture']);
-    $genderID = mysqli_real_escape_string($con, $_POST['GenderID']);
-    $bday = mysqli_real_escape_string($con, $_POST['Birthday']);
-    $email = mysqli_real_escape_string($con, $_POST['Email']);
-    $contactNo = mysqli_real_escape_string($con, $_POST['ContactNo']);
-    $address = mysqli_real_escape_string($con, $_POST['Address']);
-    $mFN = mysqli_real_escape_string($con, $_POST['MotherFirstName']);
-    $mLN = mysqli_real_escape_string($con, $_POST['MotherLastName']);
-    $mOccu = mysqli_real_escape_string($con, $_POST['MotherOccupation']);
-    $fFN = mysqli_real_escape_string($con, $_POST['FatherFirstName']);
-    $fLN = mysqli_real_escape_string($con, $_POST['FatherLastName']);
-    $fOccu = mysqli_real_escape_string($con, $_POST['FatherOccupation']);
-
-    $sql_add = "INSERT INTO students (`StudentID`, `StudentStatusID`, `LevelID`, `FirstName`, `MiddleName`, `LastName`, `GenderID`, `Birthday`, `Email`, `ContactNo`, `Address`, `MotherFirstName`, `MotherLastName`, `MotherOccupation`, `FatherFirstName`, `FatherLastName`, `FatherOccupation`, `DateAdded`, `DateModified`) VALUES ('', '$statusID', '$levelID', '$fn', '$mn', '$ln', '$genderID', '$bday', '$email', '$contactNo', '$address', '$mFN', '$mLN', '$mOccu', '$fFN', '$fLN', '$mOccu', NOW(), NULL)";
-
-    $con->query($sql_add) or die(mysqli_error($con));
-    # edit location  
-    header('location: view.php');
-  }
-
-    # list of gender
+    
+# list of gender
     $sql_gender = "SELECT genderName, genderID FROM gender";
      $result_gender =$con->query($sql_gender);
 
@@ -52,15 +22,15 @@ $page_title = "Register a User";
      }
 
      # list of status
-    $sql_status = "SELECT StatusName, StudentStatusID FROM studentstatus ORDER BY StudentStatusID";
+    $sql_status = "SELECT StatusName, StatusStudentID FROM statusstudent";
      $result_status =$con->query($sql_status);
 
      $list_status = "";
      while($row = mysqli_fetch_array($result_status))
      {
-        $statusID= $row['StudentStatusID'];
+        $statusStudentID= $row['StatusStudentID'];
         $statusName= $row['StatusName'];
-        $list_status .="<option value='$statusID'>$statusName</option>";
+        $list_status .="<option value='$statusStudentID'>$statusName</option>";
      }
 
      # list of level
@@ -74,6 +44,39 @@ $page_title = "Register a User";
         $LevelName= $row['LevelName'];
         $list_level .="<option value='$LevelID'>$LevelName</option>";
      }
+     
+    # add a student
+  if (isset($_POST['add']))
+  {
+    
+    $statusStudentid = mysqli_real_escape_string($con, $_POST['StatusStudentID']);
+    $levelid = mysqli_real_escape_string($con, $_POST['LevelID']);
+    $fn = mysqli_real_escape_string($con, $_POST['FirstName']);
+    $mn = mysqli_real_escape_string($con, $_POST['MiddleName']);
+    $ln = mysqli_real_escape_string($con, $_POST['LastName']);
+    $pic = mysqli_real_escape_string($con, $_POST['Picture']);
+    $genderid = mysqli_real_escape_string($con, $_POST['GenderID']);
+    $bday = mysqli_real_escape_string($con, $_POST['Birthday']);
+    $email = mysqli_real_escape_string($con, $_POST['Email']);
+    $contactNo = mysqli_real_escape_string($con, $_POST['ContactNo']);
+    $address = mysqli_real_escape_string($con, $_POST['Address']);
+    $mFN = mysqli_real_escape_string($con, $_POST['MotherFirstName']);
+    $mLN = mysqli_real_escape_string($con, $_POST['MotherLastName']);
+    $mOccu = mysqli_real_escape_string($con, $_POST['MotherOccupation']);
+    $fFN = mysqli_real_escape_string($con, $_POST['FatherFirstName']);
+    $fLN = mysqli_real_escape_string($con, $_POST['FatherLastName']);
+    $fOccu = mysqli_real_escape_string($con, $_POST['FatherOccupation']);
+
+    $sql_add = "INSERT INTO students (`StudentID`, `StatusStudentID`, `LevelID`, `FirstName`, `MiddleName`, `LastName`, `Picture`, `GenderID`, `Birthday`, `Email`, `ContactNo`, `Address`, `MotherFirstName`, `MotherLastName`, `MotherOccupation`, `FatherFirstName`, `FatherLastName`, `FatherOccupation`, `DateAdded`, `DateModified`) VALUES ('', $statusStudentid, $levelid, '$fn', '$mn', '$ln', '$pic', $genderid, '$bday', '$email', '$contactNo', '$address', '$mFN', '$mLN', '$mOccu', '$fFN', '$fLN', '$fOccu', NOW(), NULL)";
+
+    // $sql_add = "INSERT INTO students VALUES ('', $statusid, $levelid, '$fn', '$mn', '$ln', '$pic', $genderid, '$bday', '$email', '$contactNo', '$address', '$mFN', '$mLN', '$mOccu', '$fFN', '$fLN', '$fOccu', NOW(), NULL)";
+
+    $con->query($sql_add) or die(mysqli_error($con));
+    # edit location  
+    header('location:../student/index.php');
+  }
+
+    
 ?>
 
 <!DOCTYPE html>
@@ -332,7 +335,7 @@ $page_title = "Register a User";
                       <div class="input-group-addon">
                         <i class="fa fa-calendar"></i>
                       </div>
-                      <input type="text" name="Birthday"  class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask required>
+                      <input type="date" name="Birthday"  class="form-control" required>
                     </div>
                   </div>
                 </div>
@@ -349,7 +352,7 @@ $page_title = "Register a User";
                   <label for="contactNp" class="col-sm-2 control-label">Contact number</label>
 
                   <div class="col-sm-10">
-                    <input type="text" name="ContactNo"  class="form-control" required>
+                    <input type="number" name="ContactNo"  class="form-control" required>
                   </div>
                 </div>
 
@@ -423,7 +426,7 @@ $page_title = "Register a User";
                 <div class="form-group">
                   <label class="col-sm-2 control-label">Status</label>
                   <div class="col-sm-10">
-                    <select name="statusID"  class="form-control" required>
+                    <select name="StatusStudentID"  class="form-control" required>
                       <option>
                         </option>
                         <?php echo $list_status; ?>
