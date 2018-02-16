@@ -7,7 +7,11 @@
     $con = mysqli_connect($server, $username, $password, $database );
     # display students record
     // $sql_students = "SELECT s.StudentID, st.StatusName, l.LevelName, c.ClearanceStatus, s.FirstName, s.LastName, s.Birthday, s.Email, s.ContactNo, s.Address, s.MotherFirstName, s.MotherLastName, s.MotherOccupation, s.FatherFirstName, s.FatherLastName, s.FatherOccupation, s.DateAdded, s.DateModified FROM students s INNER JOIN studentstatus st ON s.StudentStatusID = st.StudentStatusID INNER JOIN level l ON s.LevelID = l.LevelID INNER JOIN clearance c ON s.ClearanceID = c.ClearanceID";
-     $sql_students = "SELECT * FROM students";
+
+     // $sql_students = "SELECT * FROM students";
+
+    $sql_students = "SELECT s.StudentID, st.StatusName, l.LevelName, s.FirstName, s.LastName, s.Birthday, s.Address, s.DateAdded, s.DateModified FROM students s INNER JOIN  statusstudent st ON s.StatusStudentID = st.StatusStudentID INNER JOIN level l ON s.LevelID = l.LevelID";
+
     $result_students = $con->query($sql_students)
 ?>
 <!DOCTYPE html>
@@ -244,12 +248,12 @@
               <table id="example2" class="table table-bordered table-hover">
                 <thead>
                 <tr>
-                  <th>Student ID</th>
+                  <th>ID #</th>
+                  <th>Status</th>
                   <th>Level</th>
                   <th>Name</th>
                   <th>Birthday</th>
                   <th>Address</th>
-                  <th>Status</th>
                   <th>Added On</th>
                   <th>Modified On</th>
                 </tr>
@@ -259,8 +263,8 @@
           while ($row = mysqli_fetch_array($result_students))
           {
             $sid = $row['StudentID'];
-            $st = $row['StudentStatusID'];
-            $level = $row['LevelID'];
+            $status = $row['StatusName'];
+            $level = $row['LevelName'];
             $fn = $row['FirstName'];
             $ln = $row['LastName'];           
             $bday = $row['Birthday'];           
@@ -270,7 +274,7 @@
             echo "
               <tr>
                 <td>$sid</td>
-                <td>$st</td>
+                <td>$status</td>
                 <td>$level</td>
                 <td>$ln, $fn</td>               
                 <td>$bday</td>               
